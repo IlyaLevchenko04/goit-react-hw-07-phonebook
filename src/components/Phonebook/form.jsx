@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/ContactsSlice';
-import { getContacts } from 'redux/selectors';
+import { selectContacts } from 'redux/selectors';
+import { fetchContacts, postContact } from 'services/contactsApi';
 export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
   const dispatch = useDispatch();
 
@@ -18,13 +18,15 @@ export const ContactForm = () => {
       return;
     }
 
-    dispatch(addContact(contact));
+    dispatch(postContact(contact));
+    dispatch(fetchContacts());
   };
 
   const handlerSubmit = e => {
     e.preventDefault();
     handleAddContact({ name, number });
-    e.target.reset();
+    setName('');
+    setNumber('');
   };
 
   const handlerChange = evt => {
@@ -39,7 +41,7 @@ export const ContactForm = () => {
       <label>Name</label>
       <input
         onChange={handlerChange}
-        // value={name}
+        value={name}
         type="text"
         name="name"
         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -49,7 +51,7 @@ export const ContactForm = () => {
       <label>Phone number</label>
       <input
         onChange={handlerChange}
-        // value={number}
+        value={number}
         type="tel"
         name="number"
         pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"

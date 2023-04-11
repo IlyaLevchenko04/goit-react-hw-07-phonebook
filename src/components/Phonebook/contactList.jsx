@@ -1,15 +1,15 @@
-import { getContacts, getFilter } from 'redux/selectors';
+import { selectContacts, selectFilter } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/ContactsSlice';
+import { deleteContactApi } from 'services/contactsApi';
 
 export const ContactList = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  const contacts = useSelector(selectContacts);
+  const filter = useSelector(selectFilter);
 
   const dispatch = useDispatch();
 
   function handleDelete(id) {
-    dispatch(deleteContact(id));
+    dispatch(deleteContactApi(id));
   }
 
   const getVisibleContacts = contacts.filter(({ name }) =>
